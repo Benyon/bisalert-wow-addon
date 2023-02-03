@@ -384,6 +384,9 @@ function PopupItem(itemId)
     bannerFrame:SetAlpha(0);
     bannerFrame:Show();
 
+    if BISOptions_PlaySounds == 'enabled' then
+        PlaySound(44322, 'master')
+    end
     C_Timer.NewTicker(0.01, function ()
         local bannerAlpha = bannerFrame:GetAlpha();
         bannerFrame:SetAlpha(math.min(bannerAlpha + 0.15, 1));

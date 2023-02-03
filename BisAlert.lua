@@ -31,6 +31,15 @@ local options = {
 			get = "IsIconsEnabled",
 			set = "ToggleIconsEnabled"
 		},
+		toggleSounds = {
+            order = 1,
+			type = "toggle",
+            width = "full",
+			name = "Play Sounds",
+			desc = "Toggle to play sounds when a best in slot item drops",
+			get = "IsPlaySoundsEnabled",
+			set = "ToggleSoundsEnabled"
+		},
         iconType = {
             order = 2,
 			type = "select",
@@ -154,6 +163,10 @@ function BisAlert:OnInitialize()
         BISOptions_IconType = 'purple'
     end
 
+    if not BISOptions_PlaySounds then
+        BISOptions_PlaySounds = 'enabled'
+    end
+
     InventoryItems({ assign = true })
     BIS_StartInventoryCheck()
     print(WrapInPink('BisAlert has loaded.'))
@@ -235,6 +248,19 @@ function BisAlert:IsIconsEnabled()
     else
         return false
     end
+end
+
+function BisAlert:IsPlaySoundsEnabled()
+    if BISOptions_PlaySounds == 'enabled' then
+        return true
+    else
+        return false
+    end
+end
+
+function BisAlert:ToggleSoundsEnabled(_, value)
+    local v = (value and 'enabled' or 'disabled')
+	BISOptions_PlaySounds = v
 end
 
 function BisAlert:ToggleIconsEnabled(_, value)

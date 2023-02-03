@@ -3,7 +3,7 @@
 ## Title: BisAlert
 ## Notes: Highlight best in slot items and alert you when you find one.
 ## Author: Jordan Benyon
-## SavedVariablesPerCharacter: BISOptions_ShowIcons, BISOptions_IconType, BisItems
+## SavedVariablesPerCharacter: BISOptions_ShowIcons, BISOptions_IconType, BISOptions_PlaySounds, BisItems
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
