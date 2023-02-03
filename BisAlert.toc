@@ -1,5 +1,5 @@
 ## Interface: 100002
-## Version: 0.0.9
+## Version: 1.0.0
 ## Title: BisAlert
 ## Notes: Highlight best in slot items and alert you when you find one.
 ## Author: Jordan Benyon

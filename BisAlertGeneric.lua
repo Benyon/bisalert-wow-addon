@@ -25,6 +25,65 @@ end
 
 function GetCurrentSpec(class, specId)
     local specToNameMap = {
+        ['Death Knight'] = {
+            [1] = 'Blood',
+            [2] = 'Frost',
+            [3] = 'Unholy'
+        },
+        ['Demon Hunter'] = {
+            [1] = 'Havoc',
+            [2] = 'Vengeance'
+        },
+        ['Druid'] = {
+            [1] = 'Restoration',
+            [2] = 'Guardian',
+            [3] = 'Feral',
+            [4] = 'Balance'
+        },
+        ['Evoker'] = {
+            [1] = 'Devastation',
+            [2] = 'Preservation'
+        },
+        ['Hunter'] = {
+            [1] = 'Beast Mastery',
+            [2] = 'Marksmanship',
+            [3] = 'Survival Hunter'
+        },
+        ['Mage'] = {
+            [1] = 'Arcane',
+            [2] = 'Fire',
+            [3] = 'Frost'
+        },
+        ['Monk'] = {
+            [1] = 'Brewmaster',
+            [2] = 'Mistweaver',
+            [3] = 'Windwalker'
+        },
+        ['Paladin'] = {
+            [1] = 'Holy',
+            [2] = 'Protection',
+            [3] = 'Retribution'
+        },
+        ['Priest'] = {
+            [1] = 'Discipline',
+            [2] = 'Holy',
+            [3] = 'Shadow'
+        },
+        ['Rogue'] = {
+            [1] = 'Assassination',
+            [2] = 'Outlaw',
+            [3] = 'Subtlety'
+        },
+        ['Shaman'] = {
+            [1] = 'Elemental',
+            [2] = 'Enhancement',
+            [3] = 'Restoration'
+        },
+        ['Warlock'] = {
+            [1] = 'Affliction',
+            [2] = 'Demonology',
+            [3] = 'Destruction'
+        },
         ["Warrior"] = {
             [1] = 'Arms',
             [2] = 'Fury',
@@ -88,7 +147,7 @@ function BIS_SetBISItem(class, spec, slot, itemName)
         _G["BisItems"][class..spec] = {}
     end
 
-    _G["BisItems"][class..spec][slot] = itemName;
+    _G["BisItems"][class..spec][slot] = strtrim(itemName, ' ');
 end
 
 function BIS_GetBISItems(class, spec)

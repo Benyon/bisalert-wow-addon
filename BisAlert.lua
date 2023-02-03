@@ -72,7 +72,6 @@ local function DrawGroup(container, spec)
     local playerClass = UnitClass('player');
     container:SetLayout("List")
     local specLabel = AceGUI:Create('Label')
-    specLabel:SetText('The following items are your best in slot for specalisation: '.. GetCurrentSpec(playerClass, spec))
     container:AddChild(specLabel)
     for _, slot in pairs(GetListOfItemSlots()) do
         local currentChosenBIS = BIS_GetBISItems(playerClass, GetCurrentSpec(playerClass, spec))
