@@ -1,11 +1,17 @@
 ## Interface: 100002
-## Version: 1.1.0
+## Version: 0.0.9
 ## Title: BisAlert
 ## Notes: Highlight best in slot items and alert you when you find one.
 ## Author: Jordan Benyon
-## SavedVariablesPerCharacter: VariableOne, VariableTwo
+## SavedVariablesPerCharacter: BISOptions_ShowIcons, BISOptions_IconType, BisItems
 
+Libs\LibStub\LibStub.lua
+Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
+Libs\AceAddon-3.0\AceAddon-3.0.xml
+Libs\AceEvent-3.0\AceEvent-3.0.xml
+Libs\AceDB-3.0\AceDB-3.0.xml
+Libs\AceConsole-3.0\AceConsole-3.0.xml
+Libs\AceGUI-3.0\AceGUI-3.0.xml
+Libs\AceConfig-3.0\AceConfig-3.0.xml
 BisAlertGeneric.lua
 BisAlert.lua
-BisAlertTooltips.lua
-BisAlertSlash.lua
