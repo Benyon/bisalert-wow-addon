@@ -207,23 +207,34 @@ end
 
 function BIS_EnumerateInventory()
     if BISOptions_ShowIcons == 'enabled' then
-        for i = 0, 7 do
-            for j = 0, 40 do
-                local frame = _G["ContainerFrame"..i.."Item"..j]
-                if frame ~= nil then
-                    local itemLink = ContainerFrameItemButton_GetDebugReportInfo(frame).itemLink
-                    if itemLink ~= nil then
-                        local itemId = GetItemInfoFromHyperlink(itemLink) or 0
-                        local itemName = GetItemInfo(itemId)
-                        local isBIS = BIS_IsItemBestInSlotItem(itemName)
-                        if isBIS == true then
-                            local marker = BIS_ApplyNewIcon(frame)
-                            table.insert(BISFrames, marker)
-                        end
-                    end
-                end
-            end
+        -- Iterate through item slots in bag.
+
+        -- Seems to be the new way
+        for i, frame in ContainerFrameUtil_EnumerateContainerFrames() do
+            print(i, frame)
         end
+
+        -- Old way.
+        -- for i = 0, 7 do
+        --     for j = 0, 40 do
+        --         local frame = _G["ContainerFrame"..i.."Item"..j]
+        --         if frame ~= nil then
+        --             local itemLink = ContainerFrameItemButton_GetDebugReportInfo(frame).itemLink
+        --             if itemLink ~= nil then
+        --                 print('Got frame with item', itemLink)
+        --                 local itemId = GetItemInfoFromHyperlink(itemLink) or 0
+        --                 local itemName = GetItemInfo(itemId)
+        --                 local isBIS = BIS_IsItemBestInSlotItem(itemName)
+        --                 if isBIS == true then
+        --                     local marker = BIS_ApplyNewIcon(frame)
+        --                     table.insert(BISFrames, marker)
+        --                 end
+        --             end
+        --         end
+        --     end
+        -- end
+
+        -- Iterate through item slots in character panel.
         for _, slot in pairs(GetListOfItemSlots()) do
             local invSlotId = GetInventorySlotInfo(string.upper(slot).."SLOT")
             local itemLink = GetInventoryItemLink('player', invSlotId)
@@ -241,6 +252,7 @@ function BIS_EnumerateInventory()
 end
 
 function BIS_ApplyNewIcon(parent)
+    print('BIS_ApplyNewIcon', parent)
 
     local textureId;
     local width;
@@ -269,6 +281,7 @@ function BIS_ApplyNewIcon(parent)
         alpha = 1
     end
 
+    print('CREATING FRAME FOR', parent)
     local f = CreateFrame("Frame", nil, parent)
     f:SetFrameStrata("TOOLTIP")
     f:SetWidth(width)

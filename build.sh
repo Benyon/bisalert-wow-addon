@@ -2,10 +2,38 @@
 
 set -e  # Exit immediately if a command exits with a non-zero status.
 
-# Set color codes
+# Initialize variables, flag_o is for --o flag
+flag_o=false
+files_to_remove=(
+    ".git"
+    ".gitignore"
+    "build.sh"
+    "updateLibs.sh"
+    ".vscode"
+)
 RED="\e[31m"
 GREEN="\e[32m"
 RESET="\e[0m"
+YELLOW="\e[33m"
+
+# Parse options
+while getopts ":o" opt; do
+  case $opt in
+    o)
+      flag_o=true
+      ;;
+    *)
+      echo "Usage: $0 -o"
+      exit 1
+      ;;
+  esac
+done
+
+# Check for long options (like --o)
+shift $((OPTIND -1)) # Shift to remove processed options
+if [[ "$1" == "--o" ]]; then
+  flag_o=true
+fi
 
 # Function to log errors
 error_handler() {
@@ -14,27 +42,15 @@ error_handler() {
     echo -e "${RED}Exit status: $exit_code${RESET}"  # Log the exit status
 }
 
-# Array of files and directories to remove
-files_to_remove=(
-    ".git"
-    ".gitignore"
-    "build.sh"
-    "updateLibs.sh"
-    ".vscode"
-)
-
 # Cleanup: Remove unnecessary files
 clear_left_over_files() {
     echo -e "${GREEN}Cleaning up unnecessary files...${RESET}"
     for file in "${files_to_remove[@]}"; do
-
-        echo "$file"
-
         if [[ -e "$file" ]]; then  # Check if the file exists before attempting to remove it
-            rm -rf "$file"
-            echo -e "${YELLOW}Removed: $file${RESET}"
+            rm -rf "$target_addon_dir\\$file"
+            echo -e "${YELLOW}Cleaned up: $file${RESET}"
         else
-            echo -e "${YELLOW}Skipped (not found): $file${RESET}"
+            echo -e "${RED}Skipped (not found): $file${RESET}"
         fi
     done
     echo -e "${GREEN}Cleanup completed.${RESET}"
@@ -68,5 +84,11 @@ echo -e "${GREEN}Addon renamed.${RESET}"
 # Clean up
 clear_left_over_files
 
-# Open the folder to confirm
-explorer "$target_addon_dir" || true
+# TODO: Zip up folder for dist
+# mkdir /dist
+
+# Open the folder to confirm if you haven't turned it off
+if ! $flag_o
+then
+    explorer "$target_addon_dir" || true
+fi

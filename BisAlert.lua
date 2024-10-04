@@ -285,7 +285,7 @@ end
 -- Commands
 
 function BisAlert:SlashCommand()
-	InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+	Settings.OpenToCategory('BisAlert')
 end
 
 -- Hooks
