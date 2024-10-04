@@ -1,18 +1,72 @@
-result=${PWD##*/}
-cd ..
-rm -r "C:\Program Files (x86)\World of Warcraft\_retail_\Interface\AddOns\BisAlert"
-echo "Cleared old addon."
-cp -r "./$result" "C:\Program Files (x86)\World of Warcraft\_retail_\Interface\Addons"
-echo "Copied addon to Addons folder."
-mv "C:\Program Files (x86)\World of Warcraft\_retail_\Interface\Addons\\$result" "C:\Program Files (x86)\World of Warcraft\_retail_\Interface\Addons\BisAlert"
-rm -rf "C:\Program Files (x86)\World of Warcraft\_retail_\Interface\Addons\BisAlert\.git"
-rm -rf "C:\Program Files (x86)\World of Warcraft\_retail_\Interface\Addons\BisAlert\.gitignore"
-rm -rf "C:\Program Files (x86)\World of Warcraft\_retail_\Interface\Addons\BisAlert\build.sh"
-rm -rf "C:\Program Files (x86)\World of Warcraft\_retail_\Interface\Addons\BisAlert\.vscode"
-echo "Cleaned up git, renamed folder, vscode config and cleared up build steps."
-read -p "Do you want to open the folder? y/n " choice
-if [[ $choice == "y" ]]
-then
-    explorer "C:\Program Files (x86)\World of Warcraft\_retail_\Interface\Addons\BisAlert"
-fi
- 
+#!/bin/bash
+
+set -e  # Exit immediately if a command exits with a non-zero status.
+
+# Set color codes
+RED="\e[31m"
+GREEN="\e[32m"
+RESET="\e[0m"
+
+# Function to log errors
+error_handler() {
+    local exit_code=$?  # Capture the exit status
+    echo -e "${RED}Error occurred at line $1 while executing: ${BASH_COMMAND}${RESET}"
+    echo -e "${RED}Exit status: $exit_code${RESET}"  # Log the exit status
+}
+
+# Array of files and directories to remove
+files_to_remove=(
+    ".git"
+    ".gitignore"
+    "build.sh"
+    "updateLibs.sh"
+    ".vscode"
+)
+
+# Cleanup: Remove unnecessary files
+clear_left_over_files() {
+    echo -e "${GREEN}Cleaning up unnecessary files...${RESET}"
+    for file in "${files_to_remove[@]}"; do
+
+        echo "$file"
+
+        if [[ -e "$file" ]]; then  # Check if the file exists before attempting to remove it
+            rm -rf "$file"
+            echo -e "${YELLOW}Removed: $file${RESET}"
+        else
+            echo -e "${YELLOW}Skipped (not found): $file${RESET}"
+        fi
+    done
+    echo -e "${GREEN}Cleanup completed.${RESET}"
+}
+
+# Trap errors and call error_handler function
+trap 'error_handler $LINENO' ERR
+
+# Variables
+result=${PWD##*/}  # Get the current directory name
+
+# Paths
+wow_addon_dir="D:\World of Warcraft\_retail_\Interface\AddOns"
+target_addon_dir="$wow_addon_dir\BisAlert"
+
+# Cleanup: Remove old addon
+echo -e "${GREEN}Clearing old addon...${RESET}"
+rm -rf "$target_addon_dir"
+echo -e "${GREEN}Old addon cleared.${RESET}"
+
+# Copy new addon
+echo -e "${GREEN}Copying new addon to Addons folder...${RESET}"
+cp -r "../$result" "$wow_addon_dir"
+echo -e "${GREEN}Addon copied to Addons folder.${RESET}"
+
+# Rename copied addon
+echo -e "${GREEN}Renaming addon...${RESET}"
+mv "$wow_addon_dir\\$result" "$target_addon_dir"
+echo -e "${GREEN}Addon renamed.${RESET}"
+
+# Clean up
+clear_left_over_files
+
+# Open the folder to confirm
+explorer "$target_addon_dir" || true

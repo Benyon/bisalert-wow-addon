@@ -152,6 +152,8 @@ end
 
 function BIS_GetBISItems(class, spec)
 
+    if not spec then do return end end
+
     local BisItemsForClass = _G["BisItems"][class..spec]
 
     if BisItemsForClass then
@@ -189,9 +191,12 @@ function BIS_GetBISItems(class, spec)
     return bisItems
 end
 
-
 function BIS_IsItemBestInSlotItem (itemId)
-    local characterItems = BIS_GetBISItems(UnitClass('player'), GetCurrentSpec(UnitClass('player'), GetSpecialization()))
+    local characterItems = BIS_GetBISItems(UnitClass('player'), GetCurrentSpec(UnitClass('player'), GetSpecialization())) or nil
+    if characterItems == nil then
+        print(WrapInPink("We couldn't load your best in slot items, try reloading the addon or reseting your settings."))
+        do return end
+    end
     for _, value in pairs(characterItems) do
         if itemId == value then
             do return true end

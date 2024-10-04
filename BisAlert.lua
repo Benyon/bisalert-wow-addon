@@ -77,16 +77,14 @@ local options = {
 	},
 }
 
-local function DrawGroup(container, spec)
+local function DrawGroup(container, spec, type)
     local playerClass = UnitClass('player');
     container:SetLayout("List")
-    local specLabel = AceGUI:Create('Label')
-    container:AddChild(specLabel)
     for _, slot in pairs(GetListOfItemSlots()) do
         local currentChosenBIS = BIS_GetBISItems(playerClass, GetCurrentSpec(playerClass, spec))
         local textBox = AceGUI:Create("EditBox");
         textBox:SetLabel(slot .. " Slot")
-        textBox:SetText(currentChosenBIS[slot]);
+        textBox:SetText((currentChosenBIS or {})[slot] or 'Error, reset your addon settings.');
         textBox:SetCallback('OnEnterPressed', function (_, _, text)
             BIS_SetBISItem(playerClass, GetCurrentSpec(playerClass, spec), slot, text)
             BIS_ClearIcons()
@@ -99,18 +97,19 @@ end
 local function SelectGroup(container, event, group)
     container:ReleaseChildren()
     if group == "spec1" then
-        DrawGroup(container, 1)
+        DrawGroup(container, 1, 'normal')
     elseif group == "spec2" then
-        DrawGroup(container, 2)
+        DrawGroup(container, 2, 'normal')
     elseif group == "spec3" then
-        DrawGroup(container, 3)
+        DrawGroup(container, 3, 'normal')
     elseif group == "spec4" then
-        DrawGroup(container, 4)
+        DrawGroup(container, 4, 'normal')
     end
 end
 
 function BisAlert:OpenEditor()
     local listOfSpecs = {}
+
     for i in pairs({1, 2, 3, 4}) do
         local specName = GetCurrentSpec(UnitClass('player'), i)
         if specName then
