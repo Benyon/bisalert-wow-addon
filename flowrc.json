@@ -1,7 +1,7 @@
 {
   "tasks": {
-      "build": "bash ./build -o",
-      "build:open": "bash ./build",
+      "build": "bash ./build.sh -o",
+      "build:open": "bash ./build.sh",
       "update": "bash ./updateLibs.sh"
   }
 }
