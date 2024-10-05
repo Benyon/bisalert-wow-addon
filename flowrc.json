@@ -2,6 +2,11 @@
   "tasks": {
       "build": "bash ./build.sh -o",
       "build:open": "bash ./build.sh",
-      "update": "bash ./updateLibs.sh"
+      "update": "bash ./updateLibs.sh",
+      "release": [
+        "bash ./updateLibs.sh",
+        "bash ./build.sh -o",
+        "explorer dist || true"
+      ]
   }
 }
