@@ -10,6 +10,7 @@ files_to_remove=(
     "build.sh"
     "updateLibs.sh"
     ".vscode"
+    "flowrc.json"
 )
 RED="\e[31m"
 GREEN="\e[32m"
