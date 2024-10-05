@@ -1,3 +1,7 @@
+-- TODO: Re-use frames for performance.
+-- Approach: Create a frame with an icon in each slot, including inventory, then re-use that frame.
+-- Approach: Consider how the manage adding a new bag to bag slot and expanding or reducing the slots.
+
 function WrapInPink(text)
     return "|cffDA70D6"..text
 end
@@ -108,15 +112,15 @@ function BIS_ClearIcons()
     if not BISFrames then
          do return end
     end
-    table.foreach(BISFrames, function (_, item)
+    for _, item in pairs(BISFrames) do
         item:Hide()
-    end)
+    end
     if not BISCharacterFrames then
         do return end
    end
-   table.foreach(BISCharacterFrames, function (_, item)
+   for _, item in pairs(BISCharacterFrames) do
        item:Hide()
-   end)
+   end
 end
 
 -- No event for BAG_OPEN, the BAG_OPEN even triggers on loot bags opening not player bag.
@@ -207,32 +211,36 @@ end
 
 function BIS_EnumerateInventory()
     if BISOptions_ShowIcons == 'enabled' then
-        -- Iterate through item slots in bag.
 
-        -- Seems to be the new way
-        for i, frame in ContainerFrameUtil_EnumerateContainerFrames() do
-            print(i, frame)
+        local f = _G["ContainerFrameCombinedBags"]
+        local children = {f:GetChildren()}
+        for _, frame in ipairs(children) do
+            -- If the frame is a combined bags item
+            local frameName = frame:GetDebugName()
+            if (string.match(frameName, "ContainerFrameCombinedBags%.[a-f0-9]+")) then
+                -- See if there's an item in the slot
+                if (frame.GetItemInfo ~= nil) then
+                    -- Try risky move.
+                    local success, result = pcall(function ()
+                        local itemLink = frame:GetItemInfo()
+                        if (itemLink ~= nil) then
+                            return itemLink
+                        end
+                    end)
+
+                    if success then
+                        -- Found an item in a slot
+                        local itemId = GetItemInfoFromHyperlink(result) or 0
+                        local itemName = GetItemInfo(itemId)
+                        local isBIS = BIS_IsItemBestInSlotItem(itemName)
+                        if isBIS == true then
+                            local marker = BIS_ApplyNewIcon(frame)
+                            table.insert(BISFrames, marker)
+                        end
+                    end
+                end
+            end
         end
-
-        -- Old way.
-        -- for i = 0, 7 do
-        --     for j = 0, 40 do
-        --         local frame = _G["ContainerFrame"..i.."Item"..j]
-        --         if frame ~= nil then
-        --             local itemLink = ContainerFrameItemButton_GetDebugReportInfo(frame).itemLink
-        --             if itemLink ~= nil then
-        --                 print('Got frame with item', itemLink)
-        --                 local itemId = GetItemInfoFromHyperlink(itemLink) or 0
-        --                 local itemName = GetItemInfo(itemId)
-        --                 local isBIS = BIS_IsItemBestInSlotItem(itemName)
-        --                 if isBIS == true then
-        --                     local marker = BIS_ApplyNewIcon(frame)
-        --                     table.insert(BISFrames, marker)
-        --                 end
-        --             end
-        --         end
-        --     end
-        -- end
 
         -- Iterate through item slots in character panel.
         for _, slot in pairs(GetListOfItemSlots()) do
@@ -252,7 +260,6 @@ function BIS_EnumerateInventory()
 end
 
 function BIS_ApplyNewIcon(parent)
-    print('BIS_ApplyNewIcon', parent)
 
     local textureId;
     local width;
@@ -281,7 +288,6 @@ function BIS_ApplyNewIcon(parent)
         alpha = 1
     end
 
-    print('CREATING FRAME FOR', parent)
     local f = CreateFrame("Frame", nil, parent)
     f:SetFrameStrata("TOOLTIP")
     f:SetWidth(width)

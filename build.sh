@@ -84,6 +84,16 @@ echo -e "${GREEN}Addon renamed.${RESET}"
 # Clean up
 clear_left_over_files
 
+# Zipping up a copy for upload
+echo -e "${GREEN}Zipping up addon folder...${RESET}"
+if [[ -e "./dist" ]]; then 
+    rm -rf "./dist"
+fi
+mkdir "./dist"
+zip -r "$wow_addon_dir\\BisAlert.zip" "$target_addon_dir"
+mv "$wow_addon_dir\\BisAlert.zip" "./dist/BisAlert.zip"
+echo -e "${GREEN}Addon zipped up.${RESET}"
+
 # TODO: Zip up folder for dist
 # mkdir /dist
 
