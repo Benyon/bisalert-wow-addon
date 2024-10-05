@@ -12,6 +12,7 @@ files_to_remove=(
     ".vscode"
     "flowrc.json"
     "dist"
+    "README.md"
 )
 RED="\e[31m"
 GREEN="\e[32m"
