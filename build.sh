@@ -11,6 +11,7 @@ files_to_remove=(
     "updateLibs.sh"
     ".vscode"
     "flowrc.json"
+    "dist"
 )
 RED="\e[31m"
 GREEN="\e[32m"
@@ -66,6 +67,7 @@ result=${PWD##*/}  # Get the current directory name
 # Paths
 wow_addon_dir="D:\World of Warcraft\_retail_\Interface\AddOns"
 target_addon_dir="$wow_addon_dir\BisAlert"
+original_dir=$(pwd)
 
 # Cleanup: Remove old addon
 echo -e "${GREEN}Clearing old addon...${RESET}"
@@ -91,8 +93,9 @@ if [[ -e "./dist" ]]; then
     rm -rf "./dist"
 fi
 mkdir "./dist"
-zip -r "$wow_addon_dir\\BisAlert.zip" "$target_addon_dir"
-mv "$wow_addon_dir\\BisAlert.zip" "./dist/BisAlert.zip"
+cd "$target_addon_dir"
+zip -r BisAlert.zip .\\
+mv "BisAlert.zip" "$original_dir/dist/BisAlert.zip"
 echo -e "${GREEN}Addon zipped up.${RESET}"
 
 # TODO: Zip up folder for dist
