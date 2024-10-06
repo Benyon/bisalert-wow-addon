@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ $OSTYPE == 'darwin'* ]]; then
+  echo "This will not execute successfully on MacOS, please use Windows, also ensure World of Warcraft is installed."
+  exit 1
+fi
+
 set -e  # Exit immediately if a command exits with a non-zero status.
 
 # Initialize variables, flag_o is for --o flag
